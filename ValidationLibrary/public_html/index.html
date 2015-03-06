@@ -9,11 +9,20 @@ and open the template in the editor.
         <title>Sample HTML Form for Click and Pledge FAAS</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="ValidationLibrary.js" type="text/javascript"></script>
+        <style>
+            .inError{
+                background:#faa;
+                color:#800;
+            }
+            .formItem{
+                margin-bottom:10px;
+            }
+        </style>
     </head>
     <body>
-        <div></div>
+        <div>Sample Donation Form</div>
         <!-- this form uses the default sample credentials from C&P's sample pages -->
          <form id="Donation" class="doValidate" method="post" action="https://faas.cloud.clickandpledge.com">           
             <!-- hidden C&P Donation Fields -->
@@ -78,7 +87,7 @@ and open the template in the editor.
                     <div class="row">
                         <label> </label>
                         <input id="UnitPrice5" name="UnitPrice1" type="radio" value="Other" />        
-                        Other: <input id="Other1" name="Other1" size="10" type="text" onclick='SetRadio("UnitPrice1","Other");'/>
+                        Other: <input id="Other1" name="Other1" size="10" class="numberOnly" type="text" onclick='SetRadio("UnitPrice1","Other");'/>
                      
                     </div>
                 </div>
@@ -107,16 +116,16 @@ and open the template in the editor.
             <fieldset>
                 <legend>Personal Information</legend>
                 <div class="formItem">
-                    <label for="BillingFirstName">First Name:</label><input name="BillingFirstName" class="required" type="text" id="BillingFirstName" value="John" size="30" />*
+                    <label for="BillingFirstName">First Name:</label><input name="BillingFirstName" class="required" type="text" id="BillingFirstName" value="" size="30" />*
                 </div>
                 <div class="formItem">
-                    <label for="BillingLastName">Last Name:</label><input name="BillingLastName" class="required" type="text" id="BillingLastName" value="Smith" size="30" />*
+                    <label for="BillingLastName">Last Name:</label><input name="BillingLastName" class="required" type="text" id="BillingLastName" value="" size="30" />*
                 </div>
                 <div class="formItem">
-                    <label for="BillingPhone">Phone number:</label><input name="BillingPhone" type="text" id="BillingPhone" value="540.961.9811" size="30" />
+                    <label for="BillingPhone">Phone number:</label><input name="BillingPhone" type="text" id="BillingPhone" value="" size="30" />
                 </div>
                 <div class="formItem">
-                    <label for="BillingEmail">Email address:</label><input name="BillingEmail" class="required email" type="text" id="BillingEmail" value="UserID@TestDomain.com" size="40" />*
+                    <label for="BillingEmail">Email address:</label><input name="BillingEmail" class="required email" type="text" id="BillingEmail" value="" size="40" />*
                 </div> 
                 <div class="formItem">
                     <label ></label><input name="FieldName1" type="hidden" value="GetNewsletter"  />
@@ -142,13 +151,13 @@ and open the template in the editor.
                 <legend>Billing Information</legend>
                
                 <div class="formItem">
-                    <label for="BillingAddress1">Address 1:</label><input name="BillingAddress1" class="required" type="text" id="BillingAddress1" value="2200 Kraft Drive" size="40" />*
+                    <label for="BillingAddress1">Address 1:</label><input name="BillingAddress1" class="required" type="text" id="BillingAddress1" value="" size="40" />*
                 </div>
                 <div class="formItem">
-                    <label for="BillingAddress2">Address 2 (optional):</label><input name="BillingAddress2" type="text" id="BillingAddress2" value="Suite 1175" size="40" />
+                    <label for="BillingAddress2">Address 2 (optional):</label><input name="BillingAddress2" type="text" id="BillingAddress2" value="" size="40" />
                 </div>
                 <div class="formItem">
-                    <label for="BillingCity">City:</label><input name="BillingCity" type="text" class="required" id="BillingCity" value="Blacksburg" size="40" />*
+                    <label for="BillingCity">City:</label><input name="BillingCity" type="text" class="required" id="BillingCity" value="" size="40" />*
                 </div>
                 <div class="formItem">
                     <label for="BillingCountryCode">Country:</label><select name="BillingCountryCode" size="1" onChange="UpdateStates();" id="BillingCountryCode" >
@@ -432,7 +441,7 @@ and open the template in the editor.
                     </select>
                 </div>
                 <div class="formItem">
-                    <label for="BillingPostalCode">Zip:</label><input name="BillingPostalCode" type="text" class="required" id="BillingPostalCode" value="24060" size="15" />*
+                    <label for="BillingPostalCode">Zip:</label><input name="BillingPostalCode" type="text" class="required numberOnly" id="BillingPostalCode" value="" size="15" />*
                 </div>
             </fieldset>
             <fieldset>
@@ -441,10 +450,10 @@ and open the template in the editor.
                     <label for="NameOnCard">Name on Credit Card:</label><input name="NameOnCard" type="text" class="required" id="NameOnCard" value="John Smith" size="40" />*
                 </div>
                 <div class="formItem">
-                    <label for="CardNumber">Credit card number:</label><input name="CardNumber" type="text"  class="required" id="CardNumber" value="4111111111111111" size="40" />*
+                    <label for="CardNumber">Credit card number:</label><input name="CardNumber" type="text"  class="required numberOnly" id="CardNumber" value="4111111111111111" size="40" />*
                 </div>
                 <div class="formItem">
-                    <label for="Cvv2">CVV2: </label><input name="Cvv2" type="text" id="Cvv2" class="required" value="123" size="6" />*
+                    <label for="Cvv2">CVV2: </label><input name="Cvv2" type="text" id="Cvv2" class="required numberOnly" value="123" size="6" />*
                 </div>
                 <div class="formItem">
                     <label for="ExpirationMonth" >Expiration Date:</label><select name="ExpirationMonth" id="ExpirationMonth">
@@ -473,7 +482,8 @@ and open the template in the editor.
                 </div>
 
             </fieldset>
-            <input name="SubmitButton" type="button" onClick="checkForm();" id="SubmitButton" value="Submit Donation" style="padding: 10px;background: #004f9a;color: #fff;font-size: 15px;border: none;border-radius: 5px;"/><span class="formNotice inError" style="border-radius:5px;float:right;padding:10px; color:#833;display:none;">Please fix the errors indicated above</span>
+            <input name="SubmitButton" type="button" onClick="checkForm();" id="SubmitButton" value="Submit Donation" style="padding: 10px;background: #004f9a;color: #fff;font-size: 15px;border: none;border-radius: 5px;"/>
+            <span class="formNotice inError" style="border-radius:5px;float:right;padding:10px; color:#833;display:none;">Please fix the errors indicated above</span>
         </form>
         <div id="fieldFactory" style="display:none;">
             <select id="canadianProvinces">

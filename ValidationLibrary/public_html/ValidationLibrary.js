@@ -1,6 +1,6 @@
 //KELL Validation
-// v 1.27.3
-var kellValdiationVersion = 1.27;
+
+var kellValdiationVersion = '1.27.4';
 //place immediately after jquery library import
 var j$ = jQuery.noConflict();
 
@@ -9,10 +9,11 @@ j$(document).ready(function() {//assign event handler to required fields
     j$('form.doValidate .required').change(function() {
         CheckField(this);
     });
+    j$('input.numberOnly').change(function(){CleanNumberOnlyFields();});
     UpdateStates();
     CheckMode();
     // append a notice if In Test mode.
-    if (j$('#OrderMode').val() == "Test") {
+    if (j$('#OrderMode').val() === "Test") {
         j$('#SubmitButton').parent().prepend('<div class="formNotice" style="border-radius:5px;padding:1em; color:#837;display:inline-block;position:relative;z-index:1000;background:orange;font-weight:bold;">This Form is in TEST mode. Only the 4111 Credit Card will be processed.</div>');
     }
 });
@@ -115,14 +116,16 @@ function CheckMode() {
         var tmparr = prmarr[i].split("=");
         params[tmparr[0]] = tmparr[1];
     }
-    if (params.test == "true") {
+    if ((params.test === "true")||(params.validate === "true")) {
         j$("#Cvv2").val('123');
         j$("#NameOnCard").val('John Smith');
         j$("#CardNumber").val('4111111111111111');
         j$("#ExpirationMonth").val('12');
         j$("#ExpirationYear").val('15');
         j$("#OrderMode").val('Test');
-
+    }
+    if((params.validate === "true")){       
+        j$('form.doValidate').attr('action', 'https://verify.faas.cloud.clickandpledge.com');
     }
 }
 function ClearError(target) {
@@ -135,7 +138,7 @@ function CleanNumberOnlyFields() {
     j$('input.numberOnly').each(function(index) {       
         var bOk = true;
         if(this.name === "BillingPostalCode"){
-            if (j$('select[name="BillingCountryCode"]').val() != 840){
+            if (j$('select[name="BillingCountryCode"]').val() != 840){//only the US Zip codes are validated
                 bOk = false;
             }
         }
