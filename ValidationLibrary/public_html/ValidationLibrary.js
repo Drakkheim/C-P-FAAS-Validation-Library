@@ -1,6 +1,6 @@
 //KELL Validation
 
-var kellValdiationVersion = '1.27.4';
+var kellValdiationVersion = '1.27.5';
 //place immediately after jquery library import
 var j$ = jQuery.noConflict();
 
@@ -46,7 +46,7 @@ function checkForm() {
         // Nonstandard Form.        
         if (j$("form.doValidate input[name=UnitPrice1]").length === 1){
              if (j$("form.doValidate input[name=UnitPrice1]").val() == 'Other'){
-                if (isNaN(j$("form.doValidate input[name=Other1]").val())) {
+                if ((isNaN(j$("form.doValidate input[name=Other1]").val())) || (j$("form.doValidate input[name=Other1]").val() === '')) {
                     j$("form.doValidate input[name=Other1]").addClass("inError");
                     formOkToSubmit = false;
                 }
@@ -70,8 +70,22 @@ function checkForm() {
                    } 
                } 
              }
-        }else{ // no Amount field present... alert general error.
-            alert('Please Select an amount.');
+        }else{//check for select
+            if (j$('form.doValidate select[name=UnitPrice1]').length === 1){
+        		if (j$('form.doValidate select[name=UnitPrice1]').val() === 'Other'){
+                            if ((isNaN(j$("form.doValidate input[name=Other1]").val())) || (j$("form.doValidate input[name=Other1]").val() === '')) {
+                                j$("form.doValidate input[name=Other1]").addClass("inError");
+                                formOkToSubmit = false;
+                            }	
+        		}else{
+                            if ((isNaN(j$("form.doValidate select[name=UnitPrice1]").val())) || (j$("form.doValidate input[name=UnitPrice1]").val() === '')){
+                                j$("form.doValidate input[name=UnitPrice1]").addClass("inError");
+                                formOkToSubmit = false;
+                            }
+        		}
+        	}else{  // no Amount field present... alert general error.      		
+        		alert('Please Select an amount.');
+            	}
         }
     }else{ // we do have the standard Radio Buttons to check against    
         if (j$("form.doValidate input:radio[name=UnitPrice1]:checked").val() === "Other") {
