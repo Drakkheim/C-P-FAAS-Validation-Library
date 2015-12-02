@@ -1,6 +1,6 @@
 //KELL Validation
 
-var kellValdiationVersion = '1.27.5';
+var kellValdiationVersion = '1.27.5';  
 //place immediately after jquery library import
 var j$ = jQuery.noConflict();
 
