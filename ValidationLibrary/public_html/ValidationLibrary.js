@@ -152,7 +152,7 @@ function CleanNumberOnlyFields() {
     j$('input.numberOnly').each(function(index) {       
         var bOk = true;
         if(this.name === "BillingPostalCode"){
-            if (j$('select[name="BillingCountryCode"]').val() != 840){//only the US Zip codes are validated
+            if (j$('select[name="BillingCountryCode"]').val() !== 840){//only the US Zip codes are validated
                 bOk = false;
             }
         }
