@@ -1,15 +1,27 @@
 //KELL Validation
 
-var kellValdiationVersion = '1.27.5';  
+var kellValdiationVersion = '1.28.7';
 //place immediately after jquery library import
 var j$ = jQuery.noConflict();
 
 var formOkToSubmit = false;
-j$(document).ready(function() {//assign event handler to required fields  
-    j$('form.doValidate .required').change(function() {
+j$(document).ready(function () {
+    //Dynamically update the CC Year
+    jQuery('select[name=ExpirationYear]').empty();
+    var sd = new Date().getFullYear();
+    for (x = 0; x < 15; x++) {
+        vs = sd + '';
+        jQuery('select[name=ExpirationYear]').append('<option value="' + vs.substr(2, 2) + '">' + sd + '</option>');
+        sd++;
+    }
+
+    //assign event handler to required fields  
+    j$('form.doValidate .required').change(function () {
         CheckField(this);
     });
-    j$('input.numberOnly').change(function(){CleanNumberOnlyFields();});
+    j$('input.numberOnly').change(function () {
+        CleanNumberOnlyFields();
+    });
     UpdateStates();
     CheckMode();
     // append a notice if In Test mode.
@@ -18,7 +30,7 @@ j$(document).ready(function() {//assign event handler to required fields
     }
 });
 function setFormTarget(tgt) {
-    j$(tgt + ' .required').change(function() {
+    j$(tgt + ' .required').change(function () {
         CheckField(this);
     });
 }
@@ -35,59 +47,59 @@ function checkForm() {
     j$("#Other1").removeClass("inError");
     formOkToSubmit = true;
     CleanNumberOnlyFields();
-    j$('form.doValidate .required').each(function(index) {
+    j$('form.doValidate .required').each(function (index) {
         if (!CheckField(this)) {
             formOkToSubmit = false;
             j$('.formNotice').show();
             setTimeout("j$('.formNotice').fadeOut(1000);", 6000);
         }
     });
-    if (j$("form.doValidate input:radio[name=UnitPrice1]").length === 0){
+    if (j$("form.doValidate input:radio[name=UnitPrice1]").length === 0) {
         // Nonstandard Form.        
-        if (j$("form.doValidate input[name=UnitPrice1]").length === 1){
-             if (j$("form.doValidate input[name=UnitPrice1]").val() == 'Other'){
+        if (j$("form.doValidate input[name=UnitPrice1]").length === 1) {
+            if (j$("form.doValidate input[name=UnitPrice1]").val() == 'Other') {
                 if ((isNaN(j$("form.doValidate input[name=Other1]").val())) || (j$("form.doValidate input[name=Other1]").val() === '')) {
                     j$("form.doValidate input[name=Other1]").addClass("inError");
                     formOkToSubmit = false;
                 }
-             }else{
-               if (j$("form.doValidate input[name=UnitPrice1]").val().trim() === ''){
-                   if(j$("input[name=UnitPrice1]").attr('type') != 'hidden'){
+            } else {
+                if (j$("form.doValidate input[name=UnitPrice1]").val().trim() === '') {
+                    if (j$("input[name=UnitPrice1]").attr('type') != 'hidden') {
                         j$("form.doValidate input[name=UnitPrice1]").addClass("inError");
-                    }else{
+                    } else {
                         alert('Please enter a valid amount.');
                     }
-                   formOkToSubmit = false;
-               }else{
-                   //make sure we're a valid positive amount
-                   if (j$("form.doValidate input[name=UnitPrice1]").val() <= 0){
-                       if(j$("input[name=UnitPrice1]").attr('type') != 'hidden'){
-                        j$("form.doValidate input[name=UnitPrice1]").addClass("inError");
-                    }else{
-                        alert('Please enter a valid amount.');
+                    formOkToSubmit = false;
+                } else {
+                    //make sure we're a valid positive amount
+                    if (j$("form.doValidate input[name=UnitPrice1]").val() < 0) {
+                        if (j$("input[name=UnitPrice1]").attr('type') != 'hidden') {
+                            j$("form.doValidate input[name=UnitPrice1]").addClass("inError");
+                        } else {
+                            alert('Please enter a valid amount.');
+                        }
+                        formOkToSubmit = false;
                     }
-                   formOkToSubmit = false;
-                   } 
-               } 
-             }
-        }else{//check for select
-            if (j$('form.doValidate select[name=UnitPrice1]').length === 1){
-        		if (j$('form.doValidate select[name=UnitPrice1]').val() === 'Other'){
-                            if ((isNaN(j$("form.doValidate input[name=Other1]").val())) || (j$("form.doValidate input[name=Other1]").val() === '')) {
-                                j$("form.doValidate input[name=Other1]").addClass("inError");
-                                formOkToSubmit = false;
-                            }	
-        		}else{
-                            if ((isNaN(j$("form.doValidate select[name=UnitPrice1]").val())) || (j$("form.doValidate input[name=UnitPrice1]").val() === '')){
-                                j$("form.doValidate input[name=UnitPrice1]").addClass("inError");
-                                formOkToSubmit = false;
-                            }
-        		}
-        	}else{  // no Amount field present... alert general error.      		
-        		alert('Please Select an amount.');
-            	}
+                }
+            }
+        } else {//check for select
+            if (j$('form.doValidate select[name=UnitPrice1]').length === 1) {
+                if (j$('form.doValidate select[name=UnitPrice1]').val() === 'Other') {
+                    if ((isNaN(j$("form.doValidate input[name=Other1]").val())) || (j$("form.doValidate input[name=Other1]").val() === '')) {
+                        j$("form.doValidate input[name=Other1]").addClass("inError");
+                        formOkToSubmit = false;
+                    }
+                } else {
+                    if ((isNaN(j$("form.doValidate select[name=UnitPrice1]").val())) || (j$("form.doValidate input[name=UnitPrice1]").val() === '')) {
+                        j$("form.doValidate input[name=UnitPrice1]").addClass("inError");
+                        formOkToSubmit = false;
+                    }
+                }
+            } else {  // no Amount field present... alert general error.      		
+                alert('Please Select an amount.');
+            }
         }
-    }else{ // we do have the standard Radio Buttons to check against    
+    } else { // we do have the standard Radio Buttons to check against    
         if (j$("form.doValidate input:radio[name=UnitPrice1]:checked").val() === "Other") {
             if (isNaN(j$("#Other1").val())) {
                 j$("#Other1").addClass("inError");
@@ -99,22 +111,22 @@ function checkForm() {
                     j$("form.doValidate input:radio[name=UnitPrice1]").parent().addClass("inError");
                     formOkToSubmit = false;
                 }//else it's a number and that's ok
-            }else{
+            } else {
                 // no radio selected
-                 j$("form.doValidate input:radio[name=UnitPrice1]").parent().addClass("inError");
-                 formOkToSubmit = false;
+                j$("form.doValidate input:radio[name=UnitPrice1]").parent().addClass("inError");
+                formOkToSubmit = false;
             }
         }
     }
-     if (! bProcessing){
-     	     bProcessing = true;
-	    if (formOkToSubmit) {
-		j$('form.doValidate').submit();
-	    }else{
-	    	bProcessing = false;
-	    }
-     }else{
-    	  j$('#SubmitButton').after('please wait.. processing');
+    if (!bProcessing) {
+        bProcessing = true;
+        if (formOkToSubmit) {
+            j$('form.doValidate').submit();
+        } else {
+            bProcessing = false;
+        }
+    } else {
+        j$('#SubmitButton').after('please wait.. processing');
     }
 }
 /**
@@ -130,7 +142,7 @@ function CheckMode() {
         var tmparr = prmarr[i].split("=");
         params[tmparr[0]] = tmparr[1];
     }
-    if ((params.test === "true")||(params.validate === "true")) {
+    if ((params.test === "true") || (params.validate === "true")) {
         j$("#Cvv2").val('123');
         j$("#NameOnCard").val('John Smith');
         j$("#CardNumber").val('4111111111111111');
@@ -138,9 +150,20 @@ function CheckMode() {
         j$("#ExpirationYear").val('15');
         j$("#OrderMode").val('Test');
     }
-    if((params.validate === "true")){       
+    if ((params.validate === "true")) {
         j$('form.doValidate').attr('action', 'https://verify.faas.cloud.clickandpledge.com');
     }
+    if (params.SKU !== undefined) {
+        jQuery('#SKU1').val(params.SKU);
+    }
+    if (params.sustained === "yes") {
+        jQuery('#Recurring').click();
+    }
+    if (params.amount !== undefined) {
+        jQuery('#UnitPrice5').click();
+        jQuery('#Other1').val(params.amount);
+    }
+
 }
 function ClearError(target) {
     j$(target).removeClass('inError');
@@ -149,14 +172,14 @@ function ClearText(target) {
     j$('#' + target).val('');
 }
 function CleanNumberOnlyFields() {
-    j$('input.numberOnly').each(function(index) {       
+    j$('input.numberOnly').each(function (index) {
         var bOk = true;
-        if(this.name === "BillingPostalCode"){
-            if (j$('select[name="BillingCountryCode"]').val() !== 840){//only the US Zip codes are validated
+        if (this.name === "BillingPostalCode") {
+            if (j$('select[name="BillingCountryCode"]').val() !== 840) {//only the US Zip codes are validated
                 bOk = false;
             }
         }
-        if (bOk){
+        if (bOk) {
             j$(this).val(j$(this).val().replace(/[^\d.]/g, ''));
         }
     });
@@ -218,7 +241,7 @@ function UpdateStates() {
 function MakeStateDropdown(labelName) {
     var p = j$('#BillingStateProvince').parent();
     j$(p).html('<label for="BillingStateProvince" class="editable">' + labelName + ':</label>');
-    j$(p).append('<select name="BillingStateProvince" class="required" size="1" onChange="CheckField(this);" id="BillingStateProvince" ></select>*');
+    j$(p).append('<select name="BillingStateProvince" class="required" size="1" onChange="CheckField(this);" id="BillingStateProvince" ></select>');
 }
 /***
  * 
@@ -264,7 +287,7 @@ function ShowSelectedBlock(id, target, clear) {
         j$("#" + target).fadeIn(200);
     } else {
         if (clear) {
-            j$("#" + target + " input").each(function() {
+            j$("#" + target + " input").each(function () {
                 j$(this).val('');
             });
         }
